@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=3 uid="uid://dfnubxoxnewui"]
+
+[ext_resource type="PackedScene" uid="uid://c0nleoscwif3f" path="res://TESTING/character test.tscn" id="1_imnhh"]
+[ext_resource type="PackedScene" uid="uid://bnnsof1sjd2cu" path="res://INTERACTIBLES/SLIDING DOOR/sliding_door.tscn" id="3_jo06k"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_njs0d"]
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_gir2k"]
+data = PackedVector3Array(-0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, -0.5)
+
+[node name="Node3D" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(51.7442, 0, 0, 0, 1.00387, 0, 0, 0, 51.5805, 0, 0, 0)
+mesh = SubResource("BoxMesh_njs0d")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_gir2k")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.999999, -0.00146728, 0.00064402, 0.0005894, 0.710545, 0.703652, -0.00149006, -0.70365, 0.710545, 0, 8, 0)
+
+[node name="SLIDING DOOR" parent="." instance=ExtResource("3_jo06k")]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 10.0167, 0.501934, 5.60923)
+
+[node name="Character" parent="." instance=ExtResource("1_imnhh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.60976, 2.3702, 7.02995)
+
+[connection signal="masterpasswordset" from="SLIDING DOOR" to="Character" method="_on_sliding_door_masterpasswordset"]

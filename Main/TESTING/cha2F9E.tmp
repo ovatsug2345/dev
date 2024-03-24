@@ -1,0 +1,36 @@
+[gd_scene load_steps=8 format=3 uid="uid://c0nleoscwif3f"]
+
+[ext_resource type="Script" path="res://TESTING/character test.gd" id="1_6mi8q"]
+[ext_resource type="Script" path="res://TESTING/Character body Script.gd" id="1_k3f28"]
+[ext_resource type="Script" path="res://TESTING/Camera3D.gd" id="2_oma3c"]
+[ext_resource type="PackedScene" uid="uid://rr3nhbvarcj7" path="res://hud.tscn" id="3_rg2s1"]
+
+[sub_resource type="PrismMesh" id="PrismMesh_ufrlr"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_yvmy2"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0ja3o"]
+
+[node name="Character" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+script = ExtResource("1_6mi8q")
+
+[node name="CharacterBody3D" type="CharacterBody3D" parent="."]
+script = ExtResource("1_k3f28")
+
+[node name="CharacterHead" type="MeshInstance3D" parent="CharacterBody3D"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 1, -0.163041)
+mesh = SubResource("PrismMesh_ufrlr")
+skeleton = NodePath("")
+
+[node name="Camera3D" type="Camera3D" parent="CharacterBody3D/CharacterHead"]
+transform = Transform3D(0.142857, 0, 0, 0, -6.24449e-09, -0.142857, 0, 0.142857, -6.24449e-09, 0, -0.0347799, 0.113354)
+script = ExtResource("2_oma3c")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CharacterBody3D"]
+mesh = SubResource("CapsuleMesh_yvmy2")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D"]
+shape = SubResource("CapsuleShape3D_0ja3o")
+
+[node name="HUD" parent="." instance=ExtResource("3_rg2s1")]
