@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://dwukmkbuirylj"]
+
+[ext_resource type="PackedScene" uid="uid://k5a5tcky6tpu" path="res://BLENDER MODELS/CANNISTER.glb" id="1_kbb2u"]
+[ext_resource type="Material" uid="uid://ck27n20a3nkcg" path="res://BLENDER MODELS/Material.001.tres" id="2_srv5o"]
+
+[node name="CANNISTER" instance=ExtResource("1_kbb2u")]
+
+[node name="GLASS" parent="." index="4"]
+material_override = ExtResource("2_srv5o")
+
+[node name="GLASS_001" parent="." index="7"]
+material_override = ExtResource("2_srv5o")

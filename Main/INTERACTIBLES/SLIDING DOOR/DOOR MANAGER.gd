@@ -1,22 +1,22 @@
 extends Node
 var state = "CLOSED"
 var finished = 1
-var masterpassword = randi_range(100,999)
+var passcode = Global.door_master_code
 signal doorfinished()
 signal doorreply()
 signal masterpasswordset()
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	pass
 
 func _ready():
-	masterpasswordset.emit(masterpassword)
+	masterpasswordset.emit(passcode)
 
-func _on_animation_player_animation_finished(anim_name):
+func _on_animation_player_animation_finished(_anim_name):
 	finished = 1
 	doorfinished.emit(1)
 
-func _on_keypad_doorcheck(value):
+func _on_keypad_doorcheck(_v):
 	if finished == 1:
 		doorreply.emit($".".state)
 

@@ -6,10 +6,11 @@ const JUMP_VELOCITY = 4.5
 var SPEED = 5
 var SPRINTING := true
 var SPRINTING_MODIFIER := 2
-var sensitivity := 0.005
 # accumulators
 var rot_x = 0
 var rot_y = 0
+var sensitivity := 0.005
+
 
 #CAMERA CONTROLS
 func _input(event):
@@ -17,12 +18,14 @@ func _input(event):
 		# modify accumulated mouse rotation
 		rot_x += event.relative.x * sensitivity
 		rot_y += event.relative.y * sensitivity
-		rot_y = clamp(rot_y, deg_to_rad(-80), deg_to_rad(75))
+		rot_y = clamp(rot_y, deg_to_rad(10), deg_to_rad(165))
 		transform.basis = Basis() # reset rotation
 		rotate_object_local(Vector3(0, 1, 0), -rot_x) # first rotate in Y
-		rotate_object_local(Vector3(1, 0, 0), -rot_y) # then rotate in X
+		#rotate_object_local(Vector3(1, 0, 0), -rot_y) # then rotate in X
 
-	
+
+
+
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 

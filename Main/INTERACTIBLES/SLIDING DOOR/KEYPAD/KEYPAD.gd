@@ -3,12 +3,13 @@ var lastpressed = "none"
 var password = []
 var doorfinished = 1
 var dooropen = 0
-
+var masterpassword = ""
 
 signal doorcheck()
 signal doorreply()
 signal opendoor()
 signal masterpasswordset()
+signal updatepda()
 
 func _physics_process(_delta):
 	if lastpressed == "none":
@@ -37,3 +38,9 @@ func _on_key_confirm_opendoor(value):
 
 func _on_sliding_door_masterpasswordset(value):
 	masterpasswordset.emit(value)
+	masterpassword = value
+
+
+func _on_area_3d_body_entered(body):
+	if body is CharacterBody3D:
+		updatepda.emit(masterpassword)
