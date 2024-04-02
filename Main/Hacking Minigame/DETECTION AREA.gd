@@ -1,4 +1,4 @@
-extends Node2D
+extends Control
 
 var detection_area_xy = "a"
 

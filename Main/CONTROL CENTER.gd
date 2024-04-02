@@ -1,9 +1,12 @@
-extends Node
+extends Control
 
-var prompt_spawn = 0
+var prompt_spawn 
 var game_started = 0
 var prompts_ready = 0
-
+var detection_area
+var speed = 2
+var prompt_count = 0
+var finished = 1
 var end_of_line = 0
 
 var prompt_options = []
@@ -16,24 +19,28 @@ signal stop
 func _process(_delta):
 	if Input.is_action_just_pressed("Sprint") and prompts_ready == 1:
 		start.emit(ready)
-		game_started = 1
 		start_spawning()
 
 func start_spawning():
-	while game_started == 1:
-		spawn_prompt()
-		await get_tree().create_timer(1.0).timeout
+	if finished == 1:
+		finished = 0
+		game_started = 1
+		while game_started == 1:
+			spawn_prompt()
+			await get_tree().create_timer(1.0).timeout
+			finished = 1
 
 func spawn_prompt():
 	var r_prompt =prompts_path + prompt_options.pick_random()
 	var random_prompt = load(r_prompt).instantiate()
-	random_prompt.speed = -5
-	random_prompt.position = prompt_spawn
+	random_prompt.position =self.position + random_prompt.test
 	add_child(random_prompt)
+	random_prompt.killed.connect(self._on_prompt_killed)
+	
 
 
 func _on_detection_area_s_detection_area_xy(val):
-		prompt_spawn = val + Vector2(600,0)
+		detection_area = val
 		
 
 func _ready():
@@ -57,12 +64,18 @@ func load_prompts(path):
 		print("An error occurred when trying to access the path.")
 
 
-func _on_area_2d_body_exited(body):
-	if end_of_line == body:
-		stop.emit()
-		game_started = 0
 
 
 func _on_area_2d_2_body_entered(body):
-	end_of_line = body
+	stop.emit(1)
+	game_started = 0
+	prompt_count += 1
 	
+	
+func _on_prompt_killed(v):
+	print(prompt_count)
+	prompt_count -= 1
+	if prompt_count <= 0 and finished == 1:
+		start_spawning()
+		start.emit(1)
+	print(game_started)
