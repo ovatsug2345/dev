@@ -7,7 +7,8 @@ var active = 1
 var keys = ["l","j","k","i"]
 var set_key = ""
 var actionable = 1
-var test = Vector2(0,0)
+var spawn_pos = Vector2(0,0)
+var score_value = -1
 
 
 signal set_label
@@ -19,13 +20,13 @@ func _init():
 	set_key = keys.pick_random()
 	
 	if set_key == "l":
-		test = Vector2(200,0)
+		spawn_pos = Vector2(300,0)
 	if set_key == "k":
-		test = Vector2(0,200)
+		spawn_pos = Vector2(0,300)
 	if set_key == "j":
-		test = Vector2(-200,0)
+		spawn_pos = Vector2(-300,0)
 	if set_key == "i":
-		test = Vector2(0,-200)
+		spawn_pos = Vector2(0,-300)
 
 
 func _ready():
@@ -45,6 +46,7 @@ func _ready():
 	
 	get_parent().stop.connect(self._on_control_center_stop)
 	get_parent().start.connect(self._on_control_center_start)
+	get_parent().score_area.connect(self._on_score_area)
 	if set_key == "l":
 		speed = get_parent().speed * -1
 	if set_key == "k":
@@ -66,7 +68,8 @@ func _physics_process(_delta):
 	if Input.is_action_just_pressed(set_key):
 		if actionable == 1:
 			killed.emit(1)
-			#print("dead")
+			Global.hack_score += score_value
+			print(Global.hack_score)
 			queue_free()
 
 
@@ -76,3 +79,9 @@ func _on_control_center_stop(_v):
 
 func _on_control_center_start(_v):
 	active = 1
+
+
+func _on_score_area(body):
+	if body.unique_id == unique_id:
+		score_value *= -1
+		$Label.add_theme_color_override("font_color", Color.GREEN)

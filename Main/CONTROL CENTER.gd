@@ -15,6 +15,7 @@ var prompts_path = "res://Hacking Minigame/Prompts/"
 signal start
 signal stop
 signal restart
+signal score_area
 
 
 func _process(_delta):
@@ -35,7 +36,7 @@ func start_spawning():
 func spawn_prompt():
 	var r_prompt =prompts_path + prompt_options.pick_random()
 	var random_prompt = load(r_prompt).instantiate()
-	random_prompt.position =self.position + random_prompt.test
+	random_prompt.position =self.position + random_prompt.spawn_pos
 	add_child(random_prompt)
 	random_prompt.killed.connect(self._on_prompt_killed)
 
@@ -83,4 +84,4 @@ func _on_prompt_killed(_v):
 
 
 func _on_area_2d_body_entered(body):
-	pass # Replace with function body.
+	score_area.emit(body)
