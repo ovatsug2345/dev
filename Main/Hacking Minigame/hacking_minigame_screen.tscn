@@ -54,5 +54,6 @@ scale = Vector2(5, 5)
 shape = SubResource("RectangleShape2D_geqj2")
 
 [connection signal="s_detection_area_xy" from="CONTROL CENTER/DETECTION AREA" to="CONTROL CENTER" method="_on_detection_area_s_detection_area_xy"]
+[connection signal="body_entered" from="CONTROL CENTER/DETECTION AREA/Area2D" to="CONTROL CENTER" method="_on_area_2d_body_entered"]
 [connection signal="body_exited" from="CONTROL CENTER/DETECTION AREA/Area2D" to="CONTROL CENTER" method="_on_area_2d_body_exited"]
 [connection signal="body_entered" from="CONTROL CENTER/DETECTION AREA/Area2D2" to="CONTROL CENTER" method="_on_area_2d_2_body_entered"]

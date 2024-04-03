@@ -8,13 +8,14 @@ var speed = 2
 var prompt_count = 0
 var finished = 1
 var end_of_line = 0
-
 var prompt_options = []
 var prompts_path = "res://Hacking Minigame/Prompts/"
 
 
 signal start
 signal stop
+signal restart
+
 
 func _process(_delta):
 	if Input.is_action_just_pressed("Sprint") and prompts_ready == 1:
@@ -30,24 +31,25 @@ func start_spawning():
 			await get_tree().create_timer(1.0).timeout
 			finished = 1
 
+
 func spawn_prompt():
 	var r_prompt =prompts_path + prompt_options.pick_random()
 	var random_prompt = load(r_prompt).instantiate()
 	random_prompt.position =self.position + random_prompt.test
 	add_child(random_prompt)
 	random_prompt.killed.connect(self._on_prompt_killed)
-	
 
 
 func _on_detection_area_s_detection_area_xy(val):
 		detection_area = val
-		
+
 
 func _ready():
 	load_prompts(prompts_path)
 	if prompt_options.size() >= 1:
 		prompts_ready = 1
-		
+
+
 func load_prompts(path):
 	var dir = DirAccess.open(path)
 	if dir:
@@ -64,18 +66,21 @@ func load_prompts(path):
 		print("An error occurred when trying to access the path.")
 
 
-
-
-func _on_area_2d_2_body_entered(body):
+func _on_area_2d_2_body_entered(_body):
 	stop.emit(1)
 	game_started = 0
-	prompt_count += 1
-	
-	
-func _on_prompt_killed(v):
-	print(prompt_count)
-	prompt_count -= 1
-	if prompt_count <= 0 and finished == 1:
+
+
+func _on_prompt_killed(_v):
+	if finished == 1:
 		start_spawning()
 		start.emit(1)
-	print(game_started)
+	else:
+		while game_started == 0:
+			if finished == 1:
+				start_spawning()
+				start.emit(1)
+
+
+func _on_area_2d_body_entered(body):
+	pass # Replace with function body.

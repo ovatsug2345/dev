@@ -8,6 +8,7 @@
 [sub_resource type="QuadMesh" id="QuadMesh_72avj"]
 
 [node name="PROMPT" type="AnimatableBody2D"]
+visible = false
 script = ExtResource("1_2n2b4")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
