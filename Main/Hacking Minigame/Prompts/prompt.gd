@@ -47,30 +47,38 @@ func _ready():
 	get_parent().stop.connect(self._on_control_center_stop)
 	get_parent().start.connect(self._on_control_center_start)
 	get_parent().score_area.connect(self._on_score_area)
+	var ran_speed = 1 #randf_range(1,2)
 	if set_key == "l":
-		speed = get_parent().speed * -1
+		speed = get_parent().speed * -1  * ran_speed
 	if set_key == "k":
-		speed = get_parent().speed * -1
+		speed = get_parent().speed * -1 * ran_speed
 	if set_key == "j":
-		speed = get_parent().speed
+		speed = get_parent().speed * ran_speed
 	if set_key == "i":
-		speed = get_parent().speed
+		speed = get_parent().speed * ran_speed
 	set_label.emit(set_key)
 
 
+func _process(_delta):
+		if Input.is_action_just_pressed(set_key):
+			if actionable == 1:
+				killed.emit(1)
+				Global.hack_score += score_value
+				print(Global.hack_score)
+				queue_free()
+
+
 func _physics_process(_delta):
+	
 	self.visible = true
+	
 	if active == 1:
 		if set_key == "l" or set_key == "j":
 			position += Vector2(speed,0)
+			await get_tree().create_timer(1000).timeout
 		elif set_key == "i" or set_key == "k":
 			position += Vector2(0,speed)
-	if Input.is_action_just_pressed(set_key):
-		if actionable == 1:
-			killed.emit(1)
-			Global.hack_score += score_value
-			print(Global.hack_score)
-			queue_free()
+			await get_tree().create_timer(1000).timeout
 
 
 func _on_control_center_stop(_v):

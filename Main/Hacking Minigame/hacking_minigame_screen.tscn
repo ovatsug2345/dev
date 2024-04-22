@@ -44,13 +44,13 @@ script = ExtResource("3_j5xwt")
 [node name="Area2D" type="Area2D" parent="CONTROL CENTER/DETECTION AREA"]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CONTROL CENTER/DETECTION AREA/Area2D"]
-scale = Vector2(20, 20)
+scale = Vector2(10, 10)
 shape = SubResource("RectangleShape2D_geqj2")
 
 [node name="Area2D2" type="Area2D" parent="CONTROL CENTER/DETECTION AREA"]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CONTROL CENTER/DETECTION AREA/Area2D2"]
-scale = Vector2(5, 5)
+scale = Vector2(2, 2)
 shape = SubResource("RectangleShape2D_geqj2")
 
 [connection signal="s_detection_area_xy" from="CONTROL CENTER/DETECTION AREA" to="CONTROL CENTER" method="_on_detection_area_s_detection_area_xy"]

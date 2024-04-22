@@ -1,12 +1,12 @@
 extends Control
 
 var prompt_spawn 
-var game_started = 0
+var game_started = false
 var prompts_ready = 0
 var detection_area
-var speed = 2
+var speed = 3
 var prompt_count = 0
-var finished = 1
+var finished = true
 var end_of_line = 0
 var prompt_options = []
 var prompts_path = "res://Hacking Minigame/Prompts/"
@@ -24,13 +24,13 @@ func _process(_delta):
 		start_spawning()
 
 func start_spawning():
-	if finished == 1:
-		finished = 0
-		game_started = 1
-		while game_started == 1:
+	if finished == true:
+		finished = false
+		game_started = true
+		while game_started == true:
 			spawn_prompt()
 			await get_tree().create_timer(1.0).timeout
-			finished = 1
+			finished = true
 
 
 func spawn_prompt():
@@ -69,18 +69,19 @@ func load_prompts(path):
 
 func _on_area_2d_2_body_entered(_body):
 	stop.emit(1)
-	game_started = 0
+	game_started = false
 
 
 func _on_prompt_killed(_v):
-	if finished == 1:
+	if finished == true:
 		start_spawning()
 		start.emit(1)
 	else:
-		while game_started == 0:
-			if finished == 1:
-				start_spawning()
-				start.emit(1)
+		if game_started == false:
+			while game_started == false:
+				if finished == true:
+					start_spawning()
+					start.emit(1)
 
 
 func _on_area_2d_body_entered(body):
