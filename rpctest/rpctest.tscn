@@ -1,7 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://cighbh1m2bdmm"]
+[gd_scene load_steps=5 format=3 uid="uid://cighbh1m2bdmm"]
 
 [ext_resource type="Script" path="res://Control.gd" id="1_amejd"]
+[ext_resource type="PackedScene" uid="uid://b6xrej2pgnw82" path="res://player.tscn" id="2_3pccp"]
 [ext_resource type="Script" path="res://VBoxContainer.gd" id="2_tu3yd"]
+[ext_resource type="Script" path="res://HBoxContainer.gd" id="3_drbp6"]
 
 [node name="Control" type="Control"]
 layout_mode = 3
@@ -15,8 +17,10 @@ grow_vertical = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 script = ExtResource("1_amejd")
+playerScene = ExtResource("2_3pccp")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -30,3 +34,61 @@ offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("2_tu3yd")
+
+[node name="Label" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Start Game Button" type="Button" parent="VBoxContainer"]
+visible = false
+layout_mode = 2
+text = "Start game"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -166.0
+offset_top = -50.5
+offset_right = 166.0
+offset_bottom = 50.5
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+script = ExtResource("3_drbp6")
+
+[node name="Button" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+text = "Connect"
+
+[node name="PanelContainer" type="PanelContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="LineEdit" type="LineEdit" parent="HBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+placeholder_text = "insert ip here"
+
+[node name="LineEdit2" type="LineEdit" parent="HBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+placeholder_text = "insert port here"
+
+[node name="LineEdit3" type="LineEdit" parent="HBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+placeholder_text = "Username"
+
+[node name="Button2" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+text = "HOST"
+
+[connection signal="player_connected" from="." to="VBoxContainer" method="_on_control_player_connected"]
+[connection signal="player_disconnected" from="." to="VBoxContainer" method="_on_control_player_disconnected"]
+[connection signal="player_connected" from="VBoxContainer" to="HBoxContainer" method="_on_v_box_container_player_connected"]
+[connection signal="pressed" from="VBoxContainer/Start Game Button" to="." method="_on_start_game_button_pressed"]
+[connection signal="pressed" from="HBoxContainer/Button" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="HBoxContainer/Button2" to="." method="_on_button_2_pressed"]

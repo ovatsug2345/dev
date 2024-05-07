@@ -11,5 +11,15 @@ config_version=5
 [application]
 
 config/name="rpctest"
+run/main_scene="res://rpctest.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
 config/icon="res://icon.svg"
+
+[audio]
+
+driver/enable_input=true
+
+[autoload]
+
+Gv="*res://GV.gd"
+GlobalControl="*res://Control.gd"

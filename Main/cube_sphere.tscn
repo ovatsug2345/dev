@@ -1,0 +1,5 @@
+[gd_scene load_steps=2 format=3 uid="uid://c1jhedn8n1b5y"]
+
+[ext_resource type="PackedScene" uid="uid://cwr382u4572na" path="res://BLENDER MODELS/CUBE SPHERE.blend" id="1_leq48"]
+
+[node name="CUBE SPHERE" instance=ExtResource("1_leq48")]

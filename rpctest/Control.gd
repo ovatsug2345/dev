@@ -10,10 +10,14 @@ signal server_disconnected
 const PORT = 7000
 const DEFAULT_SERVER_IP = "127.0.0.1" # IPv4 localhost
 const MAX_CONNECTIONS = 2
+var SERVER_IP 
+var SERVER_PORT
+@export var playerScene : PackedScene
+var debug = "player"
 
 # This will contain player info for every player,
 # with the keys being each player's unique IDs.
-var players = {1:"test",2:"test2"}
+@export var players = {}
 
 # This is the local player info. This should be modified locally
 # before the connection is made. It will be passed to every other peer.
@@ -22,6 +26,8 @@ var players = {1:"test",2:"test2"}
 var player_info = {"name": "Name"}
 
 var players_loaded = 0
+var min_players = 2
+var players_connected = 0
 
 
 
@@ -33,13 +39,20 @@ func _ready():
 	multiplayer.server_disconnected.connect(_on_server_disconnected)
 
 
-func join_game(address = ""):
+func join_game(address = "", port = ""):
 	if address.is_empty():
 		address = DEFAULT_SERVER_IP
+	else:
+		address = SERVER_IP
+	if port.is_empty():
+		port = PORT
+	else:
+		port = SERVER_PORT
 	var peer = ENetMultiplayerPeer.new()
-	var error = peer.create_client(address, PORT)
+	var error = peer.create_client(address, port)
 	if error:
 		return error
+	
 	multiplayer.multiplayer_peer = peer
 
 
@@ -50,6 +63,7 @@ func create_game():
 		return error
 	multiplayer.multiplayer_peer = peer
 
+	GlobalControl.players[1] = player_info
 	players[1] = player_info
 	player_connected.emit(1, player_info)
 
@@ -79,6 +93,7 @@ func player_loaded():
 # This allows transfer of all desired data for each player, not only the unique ID.
 func _on_player_connected(id):
 	_register_player.rpc_id(id, player_info)
+	
 
 
 @rpc("any_peer", "reliable")
@@ -91,13 +106,18 @@ func _register_player(new_player_info):
 func _on_player_disconnected(id):
 	players.erase(id)
 	player_disconnected.emit(id)
+	players_connected -= 1
 
 
 func _on_connected_ok():
 	var peer_id = multiplayer.get_unique_id()
 	players[peer_id] = player_info
 	player_connected.emit(peer_id, player_info)
+	player_connected_count.rpc()
 
+@rpc("any_peer", "call_remote", )
+func player_connected_count():
+	players_connected += 1
 
 func _on_connected_fail():
 	multiplayer.multiplayer_peer = null
@@ -107,3 +127,33 @@ func _on_server_disconnected():
 	multiplayer.multiplayer_peer = null
 	players.clear()
 	server_disconnected.emit()
+
+#connect
+func _on_button_pressed():
+	if not $HBoxContainer/PanelContainer/VBoxContainer/LineEdit3.text.is_empty():
+		player_info["name"] = $HBoxContainer/PanelContainer/VBoxContainer/LineEdit3.text
+		SERVER_IP = $HBoxContainer/PanelContainer/VBoxContainer/LineEdit.text
+		SERVER_PORT = $HBoxContainer/PanelContainer/VBoxContainer/LineEdit2.text
+		$VBoxContainer/Label.text = "Waiting for host"
+		join_game(SERVER_IP)
+	else:
+		print("No username set")
+
+#host
+func _on_button_2_pressed():
+	if not $HBoxContainer/PanelContainer/VBoxContainer/LineEdit3.text.is_empty():
+		player_info["name"] = $HBoxContainer/PanelContainer/VBoxContainer/LineEdit3.text
+		GlobalControl.player_info["name"] = $HBoxContainer/PanelContainer/VBoxContainer/LineEdit3.text
+		SERVER_PORT = $HBoxContainer/PanelContainer/VBoxContainer/LineEdit2.text
+		$VBoxContainer/Label.text = "Waiting for players"
+		$"VBoxContainer/Start Game Button".visible = true
+		create_game()
+		players_connected = 1
+		debug = "host"
+	else:
+		print("No username set")
+
+
+func _on_start_game_button_pressed():
+	if players_connected >= min_players:
+		load_game.rpc("res://node_2d.tscn")
