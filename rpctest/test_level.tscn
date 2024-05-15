@@ -1,6 +1,5 @@
-[gd_scene load_steps=9 format=3 uid="uid://dn06mn8vxeqkv"]
+[gd_scene load_steps=8 format=3 uid="uid://dn06mn8vxeqkv"]
 
-[ext_resource type="Script" path="res://Level manager.gd" id="1_cxa1n"]
 [ext_resource type="Script" path="res://test_level.gd" id="1_iqpde"]
 [ext_resource type="PackedScene" uid="uid://c0nleoscwif3f" path="res://Character/character test.tscn" id="2_vwrpq"]
 [ext_resource type="PackedScene" uid="uid://bnnsof1sjd2cu" path="res://SLIDING DOOR/sliding_door.tscn" id="3_drfh5"]
@@ -8,7 +7,7 @@
 [sub_resource type="BoxMesh" id="BoxMesh_fj3de"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_b76rh"]
-size = Vector3(6, 1, 6)
+size = Vector3(173.609, 1, 195.705)
 
 [sub_resource type="Environment" id="Environment_s2v7o"]
 
@@ -18,10 +17,7 @@ size = Vector3(6, 1, 6)
 script = ExtResource("1_iqpde")
 characterscene = ExtResource("2_vwrpq")
 
-[node name="Level manager" type="Node3D" parent="." node_paths=PackedStringArray("OriginNode")]
-script = ExtResource("1_cxa1n")
-player = ExtResource("2_vwrpq")
-OriginNode = NodePath("../StaticBody3D/Origin")
+[node name="Level manager" type="Node3D" parent="."]
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="Level manager"]
 _spawnable_scenes = PackedStringArray("res://Character/character test.tscn")
@@ -37,7 +33,7 @@ mesh = SubResource("BoxMesh_fj3de")
 skeleton = NodePath("../..")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
-transform = Transform3D(5.65457, 0, 0, 0, 1, 0, 0, 0, 5.64732, 0, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.12689, 0, 5.32556)
 shape = SubResource("BoxShape3D_b76rh")
 
 [node name="Origin" type="Node3D" parent="StaticBody3D"]

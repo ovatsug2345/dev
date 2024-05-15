@@ -14,4 +14,6 @@ var players_loaded = 0
 var min_players = 2
 var players_connected = 0
 var own_id
-var AudioSetup ={}
+var AudioSetup = {}
+var StartingPositions = {}
+var SpawnPoint = {}
