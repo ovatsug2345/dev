@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://cighbh1m2bdmm"]
+[gd_scene load_steps=6 format=3 uid="uid://cighbh1m2bdmm"]
 
 [ext_resource type="Script" path="res://Control.gd" id="1_amejd"]
-[ext_resource type="PackedScene" uid="uid://b6xrej2pgnw82" path="res://player.tscn" id="2_3pccp"]
+[ext_resource type="PackedScene" uid="uid://b6xrej2pgnw82" path="res://Audio Handling/player.tscn" id="2_3pccp"]
 [ext_resource type="Script" path="res://VBoxContainer.gd" id="2_tu3yd"]
 [ext_resource type="Script" path="res://HBoxContainer.gd" id="3_drbp6"]
+[ext_resource type="PackedScene" uid="uid://dn06mn8vxeqkv" path="res://test_level.tscn" id="3_s7dig"]
 
 [node name="Control" type="Control"]
 layout_mode = 3
@@ -18,6 +19,7 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 script = ExtResource("1_amejd")
 playerScene = ExtResource("2_3pccp")
+Level = ExtResource("3_s7dig")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 visible = false
@@ -85,6 +87,13 @@ placeholder_text = "Username"
 [node name="Button2" type="Button" parent="HBoxContainer"]
 layout_mode = 2
 text = "HOST"
+
+[node name="Level" type="Node" parent="."]
+
+[node name="LevelSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://test_level.tscn")
+spawn_path = NodePath("../Level")
+spawn_limit = 1
 
 [connection signal="player_connected" from="." to="VBoxContainer" method="_on_control_player_connected"]
 [connection signal="player_disconnected" from="." to="VBoxContainer" method="_on_control_player_disconnected"]

@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://b6xrej2pgnw82"]
+
+[ext_resource type="PackedScene" uid="uid://bog8bx6ft55al" path="res://Audio Handling/audio_manager.tscn" id="1_ox7f0"]
+
+[sub_resource type="AudioStreamGenerator" id="AudioStreamGenerator_menn3"]
+
+[node name="Player" type="Node3D"]
+
+[node name="AudioManager" parent="." instance=ExtResource("1_ox7f0")]
+outputPath = NodePath("../AudioStreamPlayer3D")
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer" parent="."]
+stream = SubResource("AudioStreamGenerator_menn3")
+autoplay = true

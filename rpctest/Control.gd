@@ -14,6 +14,8 @@ var SERVER_IP
 var SERVER_PORT
 @export var playerScene : PackedScene
 var debug = "player"
+var thread = null
+@export var Level : PackedScene
 
 # This will contain player info for every player,
 # with the keys being each player's unique IDs.
@@ -50,11 +52,13 @@ func join_game(address = "", port = ""):
 		port = SERVER_PORT
 	var peer = ENetMultiplayerPeer.new()
 	var error = peer.create_client(address, port)
+
 	if error:
 		return error
 	
 	multiplayer.multiplayer_peer = peer
-
+	var s = multiplayer.get_unique_id()
+	GlobalControl.players[s]=player_info
 
 func create_game():
 	var peer = ENetMultiplayerPeer.new()
@@ -62,10 +66,21 @@ func create_game():
 	if error:
 		return error
 	multiplayer.multiplayer_peer = peer
-
+	thread = Thread.new()
+	thread.start(start_upnp.bind(PORT))
+	
 	GlobalControl.players[1] = player_info
 	players[1] = player_info
 	player_connected.emit(1, player_info)
+
+func start_upnp(port):
+	var upnp = UPNP.new()
+	upnp.discover()
+	upnp.add_port_mapping(port)
+
+func _exit_tree():
+	if thread != null:
+		thread.wait_to_finish()
 
 
 func remove_multiplayer_peer():
@@ -74,10 +89,20 @@ func remove_multiplayer_peer():
 
 # When the server decides to start the game from a UI scene,
 # do Lobby.load_game.rpc(filepath)
-@rpc("call_local", "reliable")
 func load_game(game_scene_path):
-	get_tree().change_scene_to_file(game_scene_path)
-
+	hideUI()
+	if multiplayer.is_server():
+		change_level.call_deferred(load(game_scene_path))
+@rpc("call_local")
+func hideUI():
+	$VBoxContainer.hide()
+	$HBoxContainer.hide()
+func change_level(scene: PackedScene):
+	var level = $Level
+	for c in level.get_children():
+		level.remove_child(c)
+		c.queue_free()
+	level.add_child(scene.instantiate())
 
 # Every peer will call this when they have loaded the game scene.
 @rpc("any_peer", "call_local", "reliable")
@@ -100,6 +125,7 @@ func _on_player_connected(id):
 func _register_player(new_player_info):
 	var new_player_id = multiplayer.get_remote_sender_id()
 	players[new_player_id] = new_player_info
+	GlobalControl.players[new_player_id] = new_player_info
 	player_connected.emit(new_player_id, new_player_info)
 
 
@@ -156,4 +182,4 @@ func _on_button_2_pressed():
 
 func _on_start_game_button_pressed():
 	if players_connected >= min_players:
-		load_game.rpc("res://node_2d.tscn")
+		load_game(str(Level.resource_path))

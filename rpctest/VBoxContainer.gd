@@ -35,6 +35,6 @@ func _on_control_player_connected(peer_id, player_info):
 
 func _on_control_player_disconnected(peer_id):
 	print(peer_id)
-	active_players[peer_id].queue_free()
+	active_players[str(peer_id)].queue_free()
 	active_players.erase(peer_id)
 	

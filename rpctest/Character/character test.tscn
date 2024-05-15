@@ -1,0 +1,75 @@
+[gd_scene load_steps=13 format=3 uid="uid://c0nleoscwif3f"]
+
+[ext_resource type="Script" path="res://Character/character test.gd" id="1_6mi8q"]
+[ext_resource type="Script" path="res://Character/Character body Script.gd" id="1_k3f28"]
+[ext_resource type="Script" path="res://Character/Camera3D.gd" id="2_oma3c"]
+[ext_resource type="Script" path="res://Character/InputSynchronizer.gd" id="3_4elqd"]
+[ext_resource type="PackedScene" uid="uid://rr3nhbvarcj7" path="res://Character/hud.tscn" id="4_xpq6u"]
+[ext_resource type="PackedScene" uid="uid://bog8bx6ft55al" path="res://Audio Handling/audio_manager.tscn" id="6_iu4rf"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_c1edn"]
+properties/0/path = NodePath("CharacterBody3D:player")
+properties/0/spawn = true
+properties/0/replication_mode = 0
+properties/1/path = NodePath("CharacterBody3D:position")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+properties/2/path = NodePath("CharacterBody3D:velocity")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_ula7q"]
+properties/0/path = NodePath("CharacterBody3D/InputSynchronizer:direction")
+properties/0/spawn = false
+properties/0/replication_mode = 1
+
+[sub_resource type="PrismMesh" id="PrismMesh_ufrlr"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_yvmy2"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0ja3o"]
+
+[sub_resource type="AudioStreamGenerator" id="AudioStreamGenerator_g6xia"]
+
+[node name="Character" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+script = ExtResource("1_6mi8q")
+
+[node name="CharacterBody3D" type="CharacterBody3D" parent="." node_paths=PackedStringArray("ownCamera")]
+script = ExtResource("1_k3f28")
+ownCamera = NodePath("CharacterHead/Camera3D")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="CharacterBody3D"]
+root_path = NodePath("../..")
+replication_config = SubResource("SceneReplicationConfig_c1edn")
+
+[node name="InputSynchronizer" type="MultiplayerSynchronizer" parent="CharacterBody3D"]
+root_path = NodePath("../..")
+replication_config = SubResource("SceneReplicationConfig_ula7q")
+script = ExtResource("3_4elqd")
+
+[node name="CharacterHead" type="MeshInstance3D" parent="CharacterBody3D"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 1.2, 0)
+mesh = SubResource("PrismMesh_ufrlr")
+skeleton = NodePath("")
+
+[node name="Camera3D" type="Camera3D" parent="CharacterBody3D/CharacterHead"]
+transform = Transform3D(0.142857, 0, 0, 0, -6.24449e-09, -0.142857, 0, 0.142857, -6.24449e-09, 0, -0.0347799, 0.113354)
+script = ExtResource("2_oma3c")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CharacterBody3D"]
+mesh = SubResource("CapsuleMesh_yvmy2")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D"]
+shape = SubResource("CapsuleShape3D_0ja3o")
+
+[node name="HUD" parent="." instance=ExtResource("4_xpq6u")]
+
+[node name="AudioManager" parent="." instance=ExtResource("6_iu4rf")]
+outputPath = NodePath("../AudioStreamPlayer2D")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer" parent="."]
+stream = SubResource("AudioStreamGenerator_g6xia")
+autoplay = true
+
+[connection signal="HUDUPDATE" from="." to="HUD" method="_on_character_hudupdate"]

@@ -1,0 +1,56 @@
+[gd_scene load_steps=9 format=3 uid="uid://dn06mn8vxeqkv"]
+
+[ext_resource type="Script" path="res://Level manager.gd" id="1_cxa1n"]
+[ext_resource type="Script" path="res://test_level.gd" id="1_iqpde"]
+[ext_resource type="PackedScene" uid="uid://c0nleoscwif3f" path="res://Character/character test.tscn" id="2_vwrpq"]
+[ext_resource type="PackedScene" uid="uid://bnnsof1sjd2cu" path="res://SLIDING DOOR/sliding_door.tscn" id="3_drfh5"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_fj3de"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_b76rh"]
+size = Vector3(6, 1, 6)
+
+[sub_resource type="Environment" id="Environment_s2v7o"]
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_qi53q"]
+
+[node name="TestLevel" type="Node3D"]
+script = ExtResource("1_iqpde")
+characterscene = ExtResource("2_vwrpq")
+
+[node name="Level manager" type="Node3D" parent="." node_paths=PackedStringArray("OriginNode")]
+script = ExtResource("1_cxa1n")
+player = ExtResource("2_vwrpq")
+OriginNode = NodePath("../StaticBody3D/Origin")
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="Level manager"]
+_spawnable_scenes = PackedStringArray("res://Character/character test.tscn")
+spawn_path = NodePath("..")
+spawn_limit = 2
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -12.1885, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
+transform = Transform3D(33.9274, 0, 0, 0, 1, 0, 0, 0, 33.8839, 0, 0, 0)
+mesh = SubResource("BoxMesh_fj3de")
+skeleton = NodePath("../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(5.65457, 0, 0, 0, 1, 0, 0, 0, 5.64732, 0, 0, 0)
+shape = SubResource("BoxShape3D_b76rh")
+
+[node name="Origin" type="Node3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.70063, 0)
+
+[node name="SLIDING DOOR" parent="." instance=ExtResource("3_drfh5")]
+transform = Transform3D(-0.2, 0, -1.74846e-08, 0, 0.2, 0, 1.74846e-08, 0, -0.2, 19.3996, -2.37281, -0.0196638)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_s2v7o")
+camera_attributes = SubResource("CameraAttributesPractical_qi53q")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment"]
+transform = Transform3D(-0.306614, 0.337555, -0.889969, 0.109953, 0.941306, 0.319145, 0.945462, -3.0912e-07, -0.325733, 0, 0, 0)
+
+[connection signal="spawned" from="Level manager/MultiplayerSpawner" to="." method="_on_multiplayer_spawner_spawned"]
