@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://bnnsof1sjd2cu"]
+[gd_scene load_steps=20 format=3 uid="uid://bnnsof1sjd2cu"]
 
 [ext_resource type="Script" path="res://SLIDING DOOR/sliding_door.gd" id="1_1beor"]
 [ext_resource type="Script" path="res://SLIDING DOOR/DOOR MANAGER.gd" id="4_ifmdo"]
@@ -157,6 +157,9 @@ _data = {
 "OPEN": SubResource("Animation_yx84e")
 }
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_fyb55"]
+size = Vector3(10, 30, 20)
+
 [node name="SLIDING DOOR" type="Node3D"]
 transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
 script = ExtResource("1_1beor")
@@ -203,6 +206,12 @@ script = ExtResource("4_ifmdo")
 [node name="KEYPAD" parent="." instance=ExtResource("5_bg5i3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, -10)
 
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 15, -10)
+shape = SubResource("BoxShape3D_fyb55")
+
 [connection signal="masterpasswordset" from="." to="KEYPAD" method="_on_sliding_door_masterpasswordset"]
 [connection signal="animation_finished" from="AnimationPlayer" to="DOOR MANAGER" method="_on_animation_player_animation_finished"]
 [connection signal="doorfinished" from="DOOR MANAGER" to="." method="_on_door_manager_doorfinished"]
@@ -213,3 +222,5 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, -10)
 [connection signal="doorcheck" from="KEYPAD" to="DOOR MANAGER" method="_on_keypad_doorcheck"]
 [connection signal="opendoor" from="KEYPAD" to="DOOR MANAGER" method="_on_keypad_opendoor"]
 [connection signal="updatepda" from="KEYPAD" to="." method="_on_keypad_updatepda"]
+[connection signal="body_entered" from="Area3D" to="DOOR MANAGER" method="_on_area_3d_body_entered"]
+[connection signal="body_exited" from="Area3D" to="DOOR MANAGER" method="_on_area_3d_body_exited"]

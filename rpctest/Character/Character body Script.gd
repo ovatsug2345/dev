@@ -11,7 +11,6 @@ var SPRINTING_MODIFIER := 2
 
 
 
-
 @export var player := 1 :
 	set(id):
 		player = id
@@ -80,3 +79,10 @@ func _physics_process(_delta):
 @rpc("any_peer", "call_remote", "reliable")
 func SetPosition(pos):
 	position = pos
+
+func hackMinigame(reward):
+	$"../HUD".start_hack(reward)
+	
+
+func cancelMinigame():
+	$"../HUD".cancelMinigame()

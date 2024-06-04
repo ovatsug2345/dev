@@ -2,6 +2,7 @@ extends Node
 var state = "CLOSED"
 var finished = 1
 var passcode = Global.door_master_code
+var currentHackers = []
 signal doorfinished()
 signal doorreply()
 signal masterpasswordset()
@@ -32,3 +33,15 @@ func _on_keypad_opendoor(value):
 		finished = 0
 		
 		
+
+
+func _on_area_3d_body_entered(body):
+	print(str(body))
+	if body.has_method("hackMinigame"):
+		body.hackMinigame(passcode)
+		currentHackers.append(body)
+
+
+func _on_area_3d_body_exited(body):
+	if body.has_method("hackMinigame") and currentHackers.has(body):
+		body.cancelMinigame()

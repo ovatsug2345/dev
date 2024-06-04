@@ -90,7 +90,7 @@ func remove_multiplayer_peer():
 # When the server decides to start the game from a UI scene,
 # do Lobby.load_game.rpc(filepath)
 func load_game(game_scene_path):
-	hideUI()
+	hideUI.rpc()
 	if multiplayer.is_server():
 		change_level.call_deferred(load(game_scene_path))
 @rpc("call_local")

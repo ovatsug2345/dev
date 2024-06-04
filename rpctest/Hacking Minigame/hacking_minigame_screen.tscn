@@ -1,0 +1,92 @@
+[gd_scene load_steps=9 format=3 uid="uid://bvm4fu8ys86vi"]
+
+[ext_resource type="Script" path="res://Hacking Minigame/CONTROL CENTER.gd" id="1_8w8r7"]
+[ext_resource type="Script" path="res://Hacking Minigame/hacking_minigame_screen.gd" id="1_rfbkx"]
+[ext_resource type="Script" path="res://Hacking Minigame/DETECTION AREA.gd" id="3_j5xwt"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_geqj2"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_kxcfx"]
+size = Vector3(40, 40, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_g6vrr"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ddef6"]
+material = SubResource("StandardMaterial3D_g6vrr")
+size = Vector3(10, 200, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_yhjwd"]
+size = Vector3(200, 10, 1)
+
+[node name="Hacking minigame screen" type="Control"]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+script = ExtResource("1_rfbkx")
+
+[node name="CONTROL CENTER" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_8w8r7")
+
+[node name="DETECTION AREA" type="Control" parent="CONTROL CENTER"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+script = ExtResource("3_j5xwt")
+
+[node name="Area2D" type="Area2D" parent="CONTROL CENTER/DETECTION AREA"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CONTROL CENTER/DETECTION AREA/Area2D"]
+scale = Vector2(10, 10)
+shape = SubResource("RectangleShape2D_geqj2")
+
+[node name="Area2D2" type="Area2D" parent="CONTROL CENTER/DETECTION AREA"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CONTROL CENTER/DETECTION AREA/Area2D2"]
+scale = Vector2(2, 2)
+shape = SubResource("RectangleShape2D_geqj2")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="."]
+mesh = SubResource("BoxMesh_kxcfx")
+
+[node name="MeshInstance2D2" type="MeshInstance2D" parent="."]
+position = Vector2(-95, 0)
+mesh = SubResource("BoxMesh_ddef6")
+
+[node name="MeshInstance2D3" type="MeshInstance2D" parent="."]
+position = Vector2(95, 0)
+mesh = SubResource("BoxMesh_ddef6")
+
+[node name="MeshInstance2D4" type="MeshInstance2D" parent="."]
+position = Vector2(0, -95)
+mesh = SubResource("BoxMesh_yhjwd")
+
+[node name="MeshInstance2D5" type="MeshInstance2D" parent="."]
+position = Vector2(0, 95)
+mesh = SubResource("BoxMesh_yhjwd")
+
+[connection signal="s_detection_area_xy" from="CONTROL CENTER/DETECTION AREA" to="CONTROL CENTER" method="_on_detection_area_s_detection_area_xy"]
+[connection signal="body_entered" from="CONTROL CENTER/DETECTION AREA/Area2D" to="CONTROL CENTER" method="_on_area_2d_body_entered"]
+[connection signal="body_entered" from="CONTROL CENTER/DETECTION AREA/Area2D2" to="CONTROL CENTER" method="_on_area_2d_2_body_entered"]
