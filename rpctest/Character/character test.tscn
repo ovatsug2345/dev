@@ -44,7 +44,8 @@ properties/2/replication_mode = 1
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0ja3o"]
 
-[sub_resource type="AudioStreamGenerator" id="AudioStreamGenerator_g6xia"]
+[sub_resource type="AudioStreamGenerator" id="AudioStreamGenerator_cunuw"]
+mix_rate = 48000.0
 
 [node name="Character" type="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
@@ -79,12 +80,13 @@ mesh = SubResource("CapsuleMesh_yvmy2")
 shape = SubResource("CapsuleShape3D_0ja3o")
 
 [node name="HUD" parent="." instance=ExtResource("4_xpq6u")]
+visible = false
 
 [node name="AudioManager" parent="." instance=ExtResource("6_iu4rf")]
 outputPath = NodePath("../AudioStreamPlayer2D")
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer" parent="."]
-stream = SubResource("AudioStreamGenerator_g6xia")
+stream = SubResource("AudioStreamGenerator_cunuw")
 autoplay = true
 
 [connection signal="HUDUPDATE" from="." to="HUD" method="_on_character_hudupdate"]

@@ -3,6 +3,7 @@ extends CanvasLayer
 var minigames = []
 var hackGame
 var currentHack 
+var hacking = false
 
 func _on_character_hudupdate(value):
 	print(value)
@@ -15,11 +16,13 @@ func start_hack(reward):
 	add_child(game)
 	hackGame=game
 	currentHack = reward
+	hacking = true
 
 
 func cancelMinigame():
-	hackGame.quit()
-
+	if hacking == true:
+		hackGame.quit()
+	
 func load_multiple(path):
 	var dir = DirAccess.open(path)
 	if dir:
@@ -36,4 +39,5 @@ func load_multiple(path):
 		print("An error occurred when trying to access the path.")
 		
 func win():
+	hacking = false
 	$PASSWORD.text = str(currentHack)

@@ -24,6 +24,7 @@ var SPRINTING_MODIFIER := 2
 func _ready():
 	if player == multiplayer.get_unique_id():
 		$CharacterHead/Camera3D.current = true
+		$"../HUD".visible = true
 	
 
 

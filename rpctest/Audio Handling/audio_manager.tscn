@@ -1,14 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://bog8bx6ft55al"]
+[gd_scene load_steps=2 format=3 uid="uid://bog8bx6ft55al"]
 
 [ext_resource type="Script" path="res://Audio Handling/audio_manager.gd" id="1_6kurf"]
-
-[sub_resource type="AudioStreamGenerator" id="AudioStreamGenerator_bfjan"]
-mix_rate = 48000.0
 
 [node name="AudioManager" type="Node"]
 script = ExtResource("1_6kurf")
 
 [node name="Input" type="AudioStreamPlayer" parent="."]
-stream = SubResource("AudioStreamGenerator_bfjan")
-autoplay = true
 bus = &"Record"
